@@ -1,0 +1,10 @@
+/site
+/api/apis
+/api/caches
+/api/contexts
+/api/dashboards
+/api/modules
+/api/queries
+/api/schemas
+/api/tables
+/api/topics

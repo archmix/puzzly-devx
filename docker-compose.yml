@@ -1,0 +1,20 @@
+version: "2"
+
+services:
+    api:
+        image: triadyoss/governance-api
+        volumes:
+            - ./src/data/metadata:/app/site/metadata
+            - ./web-api:/app/site/web-api
+    ui:
+        image: triadyoss/governance-ui
+        volumes:
+            - "./src/data/graphql-schemas:/app/src/data/graphql-schemas"
+            - "./src/data/json-schemas:/app/src/data/json-schemas"
+            - "./src/data/swagger:/app/src/data/swagger"
+            - "./web-api:/app/src/web-api"
+            - "./src/ui/environments:/app/src/environments"
+            - "./src/ui/assets:/app/src/assets"
+            - "/app/node_modules"
+        ports:
+            - "4200:4200"

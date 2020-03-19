@@ -1,0 +1,6 @@
+---
+contextId: "context"
+schemaName: "Schema"
+schemaDescription: "Describe your schema"
+schemaFile: "/data/json-schemas/person.jss"
+---

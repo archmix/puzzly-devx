@@ -1,0 +1,6 @@
+---
+moduleId: "module"
+tableName: "Table"
+tableDescription: "Describe your Table"
+tableSchemaFile: "/data/json-schemas/person.jss"
+---

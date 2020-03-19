@@ -1,0 +1,140 @@
+defaults: &defaults
+  working_directory: ~/repo
+
+executors:
+  git_executor:
+    environment:
+      REMOTE_URI: github.com/triadyoss/governance-site.git
+      GIT_USER: CI
+      GIT_EMAIL: ci@archmix.org
+      CNAME: governance.archmix.org
+    docker:
+      - image: circleci/buildpack-deps:stretch
+
+commands:
+  clone_sources:
+    steps:
+      - run:
+          name: Clonning Puzzly OSS
+          command: |
+            git clone https://github.com/triadyoss/governance.git && 
+            rm -rf governance/.git && 
+            rm -rf governance/.circleci
+  
+  push_site_repo:
+    steps:
+        - run:
+            name: Initializing Git
+            command: |
+              git init &&
+              git config user.email "$GIT_EMAIL" &&
+              git config user.name "$GIT_USER" &&
+              git remote add origin https://${GITHUB_TOKEN}@${REMOTE_URI}
+        - run:
+            name: Configuring CNAME
+            command: |
+              echo "${CNAME}" >> CNAME
+        - run:
+            name: Commiting to Site Repo
+            command: 
+              git add . &&
+              git commit -m "Triady Governance Portal"
+        - run:
+            name: Pushing to Github
+            command: |
+              git push origin master -f
+
+version: 2.1
+jobs:
+  build-api:
+    <<: *defaults
+    docker:
+      - image: circleci/ruby
+    environment:
+      BUNDLE_PATH: ~/repo/vendor/bundle
+    steps:
+      - checkout
+      - clone_sources           
+      - run:
+          name: Preparing API source
+          command: |
+            cp -R governance/api/* ./ &&
+            rm -rf governance &&
+            mv ./src/data/metadata ./metadata &&
+            rm -rf ./src && 
+            rm -rf ./dist &&
+            rm build* &&
+            rm README.md &&
+            ls
+      - run: 
+          name: Building API
+          command: |
+            bundle check || bundle install &&
+            bundle exec jekyll build --trace --safe
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - web-api
+
+  build-ui:
+    <<: *defaults
+    docker:
+      - image: node:12.2.0
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./
+      - clone_sources
+      - run:
+          name: Preparing UI source
+          command: |
+            rm -rf src/data/metadata &&
+            cp -R governance/ui/* ./ &&
+            mv ./web-api ./src/web-api
+            rm -rf governance &&
+            ls
+      - run:
+          name: Angular Setup
+          command: |
+            npm install && 
+            npm install -g @angular/cli
+      - run:
+          name: Building UI
+          command: |
+            npm run build --prod=true
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - dist
+
+  release:
+    <<: *defaults
+    executor: git_executor
+    steps:
+      - attach_workspace:
+          at: ./
+      - run:
+          name: Preparing files to publish
+          command: |
+            ls ./dist &&
+            cp -R ./dist/* ./ &&
+            rm -rf ./dist
+      - push_site_repo
+
+workflows:
+  version: 2
+  build-release:
+    jobs:
+      - build-api:
+          context: Triady
+      - build-ui:
+          context: Triady
+          requires:
+            - build-api
+      - release:
+          context: Triady
+          requires:
+            - build-ui
+          filters:
+            branches:
+              only: master

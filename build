@@ -1,0 +1,18 @@
+docker run \
+   -it \
+   --mount type=bind,source="$(pwd)"/web-api,target=/app/site/web-api \
+   --mount type=bind,source="$(pwd)"/src/data/metadata,target=/app/site/metadata \
+   archmixoss/puzzly-api \
+   jekyll build --trace --safe
+
+ docker run \
+   -it \
+   --mount type=bind,source="$(pwd)"/src/data/graphql-schemas,target=/app/src/data/graphql-schemas \
+   --mount type=bind,source="$(pwd)"/src/data/json-schemas,target=/app/src/data/json-schemas \
+   --mount type=bind,source="$(pwd)"/src/data/swagger,target=/app/src/data/swagger \
+   --mount type=bind,source="$(pwd)"/web-api,target=/app/src/web-api \
+   --mount type=bind,source="$(pwd)"/src/ui/environments,target=/app/src/environments \
+   --mount type=bind,source="$(pwd)"/src/ui/assets,target=/app/src/assets \
+   --mount type=bind,source="$(pwd)"/dist,target=/app/dist \
+   archmixoss/puzzly-ui \
+   npm run build --prod=true
