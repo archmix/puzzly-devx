@@ -1,8 +1,6 @@
-[![CircleCI](https://circleci.com/gh/triady-oss/governance-oss.svg?style=svg)](https://circleci.com/gh/triady-oss/governance-oss)
+# Triady Developer Portal Template Repository
 
-# Triady Governance
-
-Triady Governance is a lightweight developer portal. The main objective of this module is to provide a concise list of system resources like Topics, Caches, Apis and Tables aligned with architectural resources like Business Contexts and Modules (a.k.a Services in distributed systems)
+This module is a template repository that you can use to create your own lightweight developer portal.
 
 ## How to run it on your computer
 This project uses docker compose to make development easier to contributors. 
