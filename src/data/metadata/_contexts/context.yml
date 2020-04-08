@@ -1,4 +1,4 @@
 ---
-contextName: "Context"
-contextDescription: "Describe your Context"
+contextName: "User"
+contextDescription: "Business context related to users"
 ---
