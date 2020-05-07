@@ -9,9 +9,8 @@ services:
     ui:
         image: triadyoss/governance-ui
         volumes:
-            - "./src/data/graphql-schemas:/app/src/data/graphql-schemas"
-            - "./src/data/json-schemas:/app/src/data/json-schemas"
-            - "./src/data/swagger:/app/src/data/swagger"
+            - "./src/data/graphql:/app/src/data/graphql"
+            - "./src/data/types:/app/src/data/types"
             - "./web-api:/app/src/web-api"
             - "./src/ui/environments:/app/src/environments"
             - "./src/ui/assets:/app/src/assets"

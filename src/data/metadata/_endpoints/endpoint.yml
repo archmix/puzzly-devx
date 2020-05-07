@@ -1,0 +1,10 @@
+---
+moduleId: "module"
+endpointName: "Endpoint"
+endpointUri: "endpoint/uri"
+endpointMethod: "POST"
+endpointDescription: "Describe your Endpoint"
+endpointRequestFile: "/data/types/person"
+endpointResponseFile: "/data/types/person"
+endpointErrorResponseFile: "/data/types/person"
+endpointStatusCodes: 200, 422

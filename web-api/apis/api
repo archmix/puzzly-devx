@@ -1,1 +1,0 @@
-{"path":"apis/api","id":"api","name":"API","description":"Describe your API","graphQLFile":"/data/graphql-schemas/person.qls","swaggerFile":"https://petstore.swagger.io/v2/swagger.json","module":{"id":"module","name":"Module","path":"modules/module"}}
