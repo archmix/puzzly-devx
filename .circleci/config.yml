@@ -4,10 +4,10 @@ defaults: &defaults
 executors:
   git_executor:
     environment:
-      REMOTE_URI: github.com/triadyoss/governance-site.git
+      REMOTE_URI: github.com/triadyoss/sample-devportal.git
       GIT_USER: CI
       GIT_EMAIL: ci@archmix.org
-      CNAME: governance.archmix.org
+      CNAME: devportal.archmix.org
     docker:
       - image: circleci/buildpack-deps:stretch
 
@@ -15,11 +15,11 @@ commands:
   clone_sources:
     steps:
       - run:
-          name: Clonning Puzzly OSS
+          name: Clonning Triady Developer Portal
           command: |
-            git clone https://github.com/triadyoss/governance.git && 
-            rm -rf governance/.git && 
-            rm -rf governance/.circleci
+            git clone https://github.com/triadyoss/developer-portal.git && 
+            rm -rf developer-portal/.git && 
+            rm -rf developer-portal/.circleci
   
   push_site_repo:
     steps:
@@ -38,7 +38,7 @@ commands:
             name: Commiting to Site Repo
             command: 
               git add . &&
-              git commit -m "Triady Governance Portal"
+              git commit -m "Triady Developer Portal"
         - run:
             name: Pushing to Github
             command: |
@@ -58,14 +58,13 @@ jobs:
       - run:
           name: Preparing API source
           command: |
-            cp -R governance/api/* ./ &&
-            rm -rf governance &&
+            cp -R developer-portal/api/* ./ &&
+            rm -rf developer-portal &&
             mv ./src/data/metadata ./metadata &&
             rm -rf ./src && 
             rm -rf ./dist &&
             rm build* &&
-            rm README.md &&
-            ls
+            rm README.md
       - run: 
           name: Building API
           command: |
@@ -89,10 +88,9 @@ jobs:
           name: Preparing UI source
           command: |
             rm -rf src/data/metadata &&
-            cp -R governance/ui/* ./ &&
+            cp -R developer-portal/ui/* ./ &&
             mv ./web-api ./src/web-api
-            rm -rf governance &&
-            ls
+            rm -rf developer-portal
       - run:
           name: Angular Setup
           command: |
